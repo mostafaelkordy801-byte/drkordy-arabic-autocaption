@@ -77,7 +77,7 @@ export default function Home() {
       <section className="stepsWrap">
         <div className="section shell">
           <p className="kicker light">3 خطوات وخلاص</p>
-          <h2 className="lightTitle">من الصوت للكابشن<br />في وقت أقل.</h2>
+          <h2 className="lightTitle">من الصوت للكابشن<br />بدون مصاريف</h2>
           <div className="steps">
             <div><b>1</b><h3>ضيف الملف</h3><p>اختار الفيديو أو الصوت اللي عايز تعمل له كابشن.</p></div>
             <div><b>2</b><h3>سيبه يسمع</h3><p>الـplugin يحلل الكلام العربي على جهازك، أوفلاين.</p></div>
