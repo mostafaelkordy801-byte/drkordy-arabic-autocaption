@@ -97,12 +97,12 @@ export default function Home() {
           <div className="price"><strong>100</strong><span>جنيه<br />مرة واحدة</span></div>
           <ul><li>Arabic AutoCaption</li><li>يعمل بدون إنترنت</li><li>لا توجد رسوم شهرية</li><li>خطوات تثبيت واضحة</li></ul>
           <div className="paymentMethods">
-            <a className="paymentMethod instapay" href="https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6" target="_blank" rel="noreferrer">
+            <a className="paymentMethod instapay" href="https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6" target="_blank" rel="noreferrer" onClick={() => (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: "InstaPay" })}>
               <span><b>InstaPay</b><small>افتح رابط التحويل المباشر</small></span><strong>←</strong>
             </a>
             <div className="paymentMethod vodafone">
               <span><b>Vodafone Cash</b><small dir="ltr">01055670098</small></span>
-              <button type="button" onClick={() => navigator.clipboard.writeText("01055670098")}>نسخ الرقم</button>
+                <button type="button" onClick={() => { navigator.clipboard.writeText("01055670098"); (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: "Vodafone Cash" }); }}>نسخ الرقم</button>
             </div>
           </div>
           <small className="paymentNote">حوّل 100 جنيه فقط، واحتفظ بصورة إيصال التحويل لتأكيد طلبك.</small>
@@ -111,6 +111,7 @@ export default function Home() {
             href="https://wa.me/201055670098?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%A3%D9%86%D8%A7%20%D8%AF%D9%81%D8%B9%D8%AA%20100%20%D8%AC%D9%86%D9%8A%D9%87%20%D9%84%D8%B4%D8%B1%D8%A7%D8%A1%20Dr%20Kordy%20Studio%20%E2%80%94%20Arabic%20AutoCaption.%0A%0A%D8%A7%D9%84%D8%A7%D8%B3%D9%85%3A%20%0A%D9%88%D8%B3%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9%3A%20%0A%D8%B1%D9%82%D9%85%20%D8%A7%D9%84%D8%AA%D8%AD%D9%88%D9%8A%D9%84%20%D9%85%D9%86%D9%87%3A%20%0A%0A%D9%87%D8%A8%D8%B9%D8%AA%20%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A5%D9%8A%D8%B5%D8%A7%D9%84%20%D8%A7%D9%84%D8%AA%D8%AD%D9%88%D9%8A%D9%84%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%B1%D8%B3%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D8%AA%D8%A7%D9%84%D9%8A%D8%A9."
             target="_blank"
             rel="noreferrer"
+            onClick={() => (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP" })}
           >
             دفعت؟ أكّد طلبك على واتساب <span>←</span>
           </a>
