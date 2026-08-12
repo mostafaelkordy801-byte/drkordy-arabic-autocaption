@@ -64,7 +64,7 @@ export default function Home() {
       <section className="section shell" id="how">
         <div className="sectionHead">
           <p className="kicker">ليه Dr Kordy Studio؟</p>
-          <h2>وقتك للمحتوى.<br />مش للاشتراكات.</h2>
+          <h2>فلوسك لنفسك.<br />مش للاشتراكات.</h2>
           <p>أداة بسيطة ومباشرة، معمولة عشان تشتغل وتنجز من غير تعقيد أو تكلفة شهرية.</p>
         </div>
         <div className="features">
