@@ -89,7 +89,7 @@ export default function Home() {
       <section className="section shell buy" id="buy">
         <div className="priceCopy">
           <p className="kicker">سعر إطلاق بسيط</p>
-          <h2>امتلكه.<br />ما تأجّروش.</h2>
+          <h2>امتلكه.<br />متأجروش.</h2>
           <p>بدل ما تدفع كل شهر، دفعة واحدة صغيرة تخلي Dr Kordy Studio معاك في كل مشروع جاي.</p>
         </div>
         <div className="priceCard">
