@@ -34,7 +34,7 @@ export default function Home() {
           <h1>الكابشن العربي،<br /><em>من غير اشتراك.</em></h1>
           <p className="lead">حوّل كلامك العربي لكابشن بسرعة، على جهازك ومن غير إنترنت. ادفع مرة واحدة واستخدمه طول العمر.</p>
           <div className="heroActions">
-            <a className="primary" href="#buy">اشتري نسختك — 100 ج.م <span>←</span></a>
+            <a className="primary" href="#buy">حمل نسختك — 100 ج.م <span>←</span></a>
             <a className="textLink" href="#how">شوف بيشتغل إزاي</a>
           </div>
           <div className="trustRow">
