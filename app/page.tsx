@@ -6,7 +6,7 @@ const features = [
 
 const faqs = [
   ["هل فيه اشتراك شهري؟", "لا. بتدفع 100 جنيه مرة واحدة والنسخة تفضل معاك مدى الحياة."],
-  ["لازم أكون متصل بالإنترنت؟", "لا. DrKordy — Arabic AutoCaption بيشتغل أوفلاين بعد التثبيت."],
+  ["لازم أكون متصل بالإنترنت؟", "لا. Dr Kordy Studio — Arabic AutoCaption بيشتغل أوفلاين بعد التثبيت."],
   ["هل ملفاتي بتترفع على سيرفر؟", "لأن المعالجة أوفلاين، ملفاتك تفضل على جهازك أثناء الشغل."],
   ["هستلم الـplugin إزاي؟", "بعد تأكيد الطلب والدفع، هتوصلك النسخة مع خطوات التثبيت والتشغيل."],
 ];
@@ -15,9 +15,9 @@ export default function Home() {
   return (
     <main>
       <nav className="nav shell" aria-label="التنقل الرئيسي">
-        <a className="brand" href="#top" aria-label="DrKordy الرئيسية">
+        <a className="brand" href="#top" aria-label="Dr Kordy Studio الرئيسية">
           <span className="brandMark">د</span>
-          <span>DrKordy</span>
+          <span>Dr Kordy Studio</span>
         </a>
         <a className="navCta" href="#buy">اشتري بـ 100 جنيه</a>
       </nav>
@@ -37,7 +37,7 @@ export default function Home() {
         </div>
 
         <div className="productVisual" aria-label="معاينة شكل الكابشن العربي">
-          <div className="visualTop"><span>DRKORDY / AUTO CAPTION</span><span className="status">● OFFLINE</span></div>
+          <div className="visualTop"><span>DR KORDY STUDIO / AUTO CAPTION</span><span className="status">● OFFLINE</span></div>
           <div className="wave" aria-hidden="true">
             {[18,34,56,26,72,42,64,88,52,30,68,44,80,56,24,46,70,38,58,28,76,48,32,62].map((h,i)=><i key={i} style={{height:`${h}%`}} />)}
           </div>
@@ -54,7 +54,7 @@ export default function Home() {
 
       <section className="section shell" id="how">
         <div className="sectionHead">
-          <p className="kicker">ليه DrKordy؟</p>
+          <p className="kicker">ليه Dr Kordy Studio؟</p>
           <h2>وقتك للمحتوى.<br />مش للاشتراكات.</h2>
           <p>أداة بسيطة ومباشرة، معمولة عشان تشتغل وتنجز من غير تعقيد أو تكلفة شهرية.</p>
         </div>
@@ -79,13 +79,13 @@ export default function Home() {
         <div className="priceCopy">
           <p className="kicker">سعر إطلاق بسيط</p>
           <h2>امتلكه.<br />ما تأجّروش.</h2>
-          <p>بدل ما تدفع كل شهر، دفعة واحدة صغيرة تخلي DrKordy معاك في كل مشروع جاي.</p>
+          <p>بدل ما تدفع كل شهر، دفعة واحدة صغيرة تخلي Dr Kordy Studio معاك في كل مشروع جاي.</p>
         </div>
         <div className="priceCard">
           <span className="badge">ترخيص مدى الحياة</span>
           <div className="price"><strong>100</strong><span>جنيه<br />مرة واحدة</span></div>
           <ul><li>Arabic AutoCaption</li><li>يعمل بدون إنترنت</li><li>لا توجد رسوم شهرية</li><li>خطوات تثبيت واضحة</li></ul>
-          <a className="primary full" href="mailto:?subject=طلب شراء DrKordy Arabic AutoCaption&body=أريد شراء DrKordy Arabic AutoCaption بسعر 100 جنيه.">اطلب نسختك الآن <span>←</span></a>
+          <a className="primary full" href="mailto:?subject=طلب شراء Dr Kordy Studio Arabic AutoCaption&body=أريد شراء Dr Kordy Studio Arabic AutoCaption بسعر 100 جنيه.">اطلب نسختك الآن <span>←</span></a>
           <small>هنضيف وسيلة الدفع المباشر قريبًا</small>
         </div>
       </section>
@@ -95,7 +95,7 @@ export default function Home() {
         <div className="faqList">{faqs.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>
       </section>
 
-      <footer><div className="shell footerInner"><div className="brand"><span className="brandMark">د</span><span>DrKordy</span></div><p>Arabic AutoCaption — اشتري مرة، استخدم طول العمر.</p><a href="#top">ارجع لفوق ↑</a></div></footer>
+      <footer><div className="shell footerInner"><div className="brand"><span className="brandMark">د</span><span>Dr Kordy Studio</span></div><p>Arabic AutoCaption — اشتري مرة، استخدم طول العمر.</p><a href="#top">ارجع لفوق ↑</a></div></footer>
     </main>
   );
 }
