@@ -54,7 +54,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="marquee" aria-label="مميزات سريعة"><div>مرة واحدة فقط · أوفلاين بالكامل · خصوصية أعلى · كابشن عربي · 100 جنيه فقط · مرة واحدة فقط · أوفلاين بالكامل · خصوصية أعلى · كابشن عربي ·</div></section>
+      <section className="marquee" aria-label="مميزات سريعة">
+        <div className="marqueeTrack">
+          <span>مرة واحدة فقط · أوفلاين بالكامل · خصوصية أعلى · كابشن عربي · 100 جنيه فقط ·</span>
+          <span aria-hidden="true">مرة واحدة فقط · أوفلاين بالكامل · خصوصية أعلى · كابشن عربي · 100 جنيه فقط ·</span>
+        </div>
+      </section>
 
       <section className="section shell" id="how">
         <div className="sectionHead">
