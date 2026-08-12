@@ -16,7 +16,7 @@ export default function Home() {
     <main>
       <nav className="nav shell" aria-label="التنقل الرئيسي">
         <a className="brand" href="#top" aria-label="Dr Kordy Studio الرئيسية">
-          <img className="brandLogo" src="/drkordy-arabic-autocaption/kd-logo.png" alt="" />
+          <img className="brandLogo" src="/drkordy-arabic-autocaption/kd-logo-v2.png" alt="" />
           <span>Dr Kordy Studio</span>
         </a>
         <a className="navCta" href="#buy">اشتري بـ 100 جنيه</a>
@@ -95,7 +95,7 @@ export default function Home() {
         <div className="faqList">{faqs.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>
       </section>
 
-      <footer><div className="shell footerInner"><div className="brand"><img className="brandLogo" src="/drkordy-arabic-autocaption/kd-logo.png" alt="" /><span>Dr Kordy Studio</span></div><p>Arabic AutoCaption — اشتري مرة، استخدم طول العمر.</p><a href="#top">ارجع لفوق ↑</a></div></footer>
+      <footer><div className="shell footerInner"><div className="brand"><img className="brandLogo" src="/drkordy-arabic-autocaption/kd-logo-v2.png" alt="" /><span>Dr Kordy Studio</span></div><p>Arabic AutoCaption — اشتري مرة، استخدم طول العمر.</p><a href="#top">ارجع لفوق ↑</a></div></footer>
     </main>
   );
 }
