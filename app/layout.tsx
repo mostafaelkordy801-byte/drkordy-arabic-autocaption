@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "DrKordy — Arabic AutoCaption",
-  description: "كابشن عربي أوفلاين، بدون اشتراك. ادفع مرة واحدة واستخدمه مدى الحياة.",
+  title: "Dr Kordy Studio — Arabic AutoCaption",
+  description: "من Dr Kordy Studio: كابشن عربي أوفلاين، بدون اشتراك. ادفع مرة واحدة واستخدمه مدى الحياة.",
   icons: { icon: "/favicon.svg" },
 };
 
