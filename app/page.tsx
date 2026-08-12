@@ -25,7 +25,7 @@ export default function Home() {
           <img className="brandLogo" src="/drkordy-arabic-autocaption/kd-logo-v2.png" alt="" />
           <span>Dr Kordy Studio</span>
         </a>
-        <a className="navCta" href="#buy">اشتري بـ 100 جنيه</a>
+        <a className="navCta" href="#buy">حمله ب 100 جنيه</a>
       </nav>
 
       <section className="hero shell" id="top">
