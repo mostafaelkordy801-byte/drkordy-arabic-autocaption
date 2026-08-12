@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Dr Kordy Studio — Arabic AutoCaption",
   description: "من Dr Kordy Studio: كابشن عربي أوفلاين، بدون اشتراك. ادفع مرة واحدة واستخدمه مدى الحياة.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/drkordy-arabic-autocaption/kd-logo.png" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
