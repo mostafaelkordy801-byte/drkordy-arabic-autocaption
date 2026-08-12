@@ -1,3 +1,5 @@
+"use client";
+
 const features = [
   { n: "01", title: "شراء مرة واحدة", text: "من غير اشتراك شهري، ولا مصاريف بتتكرر كل ما تفتح البرنامج." },
   { n: "02", title: "شغال أوفلاين", text: "كمّل شغلك من غير إنترنت، ومن غير ما ملفاتك تخرج من جهازك." },
@@ -94,8 +96,16 @@ export default function Home() {
           <span className="badge">ترخيص مدى الحياة</span>
           <div className="price"><strong>100</strong><span>جنيه<br />مرة واحدة</span></div>
           <ul><li>Arabic AutoCaption</li><li>يعمل بدون إنترنت</li><li>لا توجد رسوم شهرية</li><li>خطوات تثبيت واضحة</li></ul>
-          <a className="primary full" href="mailto:?subject=طلب شراء Dr Kordy Studio Arabic AutoCaption&body=أريد شراء Dr Kordy Studio Arabic AutoCaption بسعر 100 جنيه.">اطلب نسختك الآن <span>←</span></a>
-          <small>هنضيف وسيلة الدفع المباشر قريبًا</small>
+          <div className="paymentMethods">
+            <a className="paymentMethod instapay" href="https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6" target="_blank" rel="noreferrer">
+              <span><b>InstaPay</b><small>افتح رابط التحويل المباشر</small></span><strong>←</strong>
+            </a>
+            <div className="paymentMethod vodafone">
+              <span><b>Vodafone Cash</b><small dir="ltr">01055670098</small></span>
+              <button type="button" onClick={() => navigator.clipboard.writeText("01055670098")}>نسخ الرقم</button>
+            </div>
+          </div>
+          <small className="paymentNote">حوّل 100 جنيه فقط، واحتفظ بصورة إيصال التحويل لتأكيد طلبك.</small>
         </div>
       </section>
 
