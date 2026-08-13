@@ -35,7 +35,6 @@ export default function Home() {
           <p className="lead">حوّل كلامك العربي لكابشن بسرعة، على جهازك ومن غير إنترنت. ادفع مرة واحدة واستخدمه طول العمر.</p>
           <div className="heroActions">
             <a className="primary" href="#buy">حمل نسختك — 100 ج.م <span>←</span></a>
-            <a className="textLink" href="#how">شوف بيشتغل إزاي</a>
           </div>
           <div className="trustRow">
             <span>✓ بدون اشتراك</span><span>✓ يعمل أوفلاين</span><span>✓ شراء مدى الحياة</span>
