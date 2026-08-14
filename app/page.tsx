@@ -80,7 +80,7 @@ export default function Home() {
 
   const confirmReceipt = () => {
     const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
-    (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName });
+    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "addpaymentinfo_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
     window.open(`https://wa.me/201055670098?text=${encodeURIComponent(customerMessage())}`, "_blank", "noopener,noreferrer");
   };
 
