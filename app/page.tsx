@@ -24,6 +24,7 @@ export default function Home() {
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"instapay" | "vodafone" | "">("");
+  const [showCheckout, setShowCheckout] = useState(false);
 
   const confirmPayment = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -122,7 +123,11 @@ export default function Home() {
           <span className="badge">ترخيص مدى الحياة</span>
           <div className="price"><strong>100</strong><span>جنيه<br />مرة واحدة</span></div>
           <ul><li>Arabic AutoCaption</li><li>يعمل بدون إنترنت</li><li>لا توجد رسوم شهرية</li><li>خطوات تثبيت واضحة</li></ul>
-          <form className="checkoutForm" onSubmit={confirmPayment}>
+          {!showCheckout ? (
+            <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }); }}>
+              Download Now <span>←</span>
+            </button>
+          ) : <form className="checkoutForm" onSubmit={confirmPayment}>
             <div className="checkoutStep"><b>1</b><span>اكتب بياناتك</span></div>
             <label>الاسم بالكامل<input required value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="اسمك" autoComplete="name" /></label>
             <label>رقم الموبايل<input required value={customerPhone} onChange={(event) => setCustomerPhone(event.target.value)} placeholder="01xxxxxxxxx" inputMode="tel" dir="ltr" autoComplete="tel" /></label>
@@ -145,7 +150,7 @@ export default function Home() {
 
             <small className="paymentNote">بعد التحويل احتفظ بصورة الإيصال، واضغط «تم» لتأكيد طلبك.</small>
             <button className="confirmOrder" type="submit" disabled={!customerName.trim() || !customerPhone.trim() || !paymentMethod}>تم <span>←</span></button>
-          </form>
+          </form>}
         </div>
       </section>
 
