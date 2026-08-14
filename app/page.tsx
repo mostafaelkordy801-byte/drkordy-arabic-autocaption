@@ -25,13 +25,11 @@ export default function Home() {
   const [customerEmail, setCustomerEmail] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"instapay" | "vodafone" | "">("");
   const [showCheckout, setShowCheckout] = useState(false);
+  const [paymentStarted, setPaymentStarted] = useState(false);
 
-  const confirmPayment = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!customerName.trim() || !customerPhone.trim() || !paymentMethod) return;
-
+  const customerMessage = () => {
     const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
-    const message = [
+    return [
       "أهلاً، أنا دفعت 100 جنيه لشراء Dr Kordy Studio — Arabic AutoCaption.",
       "",
       `الاسم: ${customerName.trim()}`,
@@ -41,9 +39,23 @@ export default function Home() {
       "",
       "هبعت صورة إيصال الدفع في الرسالة التالية.",
     ].filter(Boolean).join("\n");
+  };
 
+  const startPayment = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!customerName.trim() || !customerPhone.trim() || !paymentMethod) return;
+
+    const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
+    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName });
+    setPaymentStarted(true);
+    if (paymentMethod === "instapay") window.open("https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6", "_blank", "noopener,noreferrer");
+    else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) window.open("https://vf.eg/vfcash", "_blank", "noopener,noreferrer");
+  };
+
+  const confirmReceipt = () => {
+    const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
     (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName });
-    window.open(`https://wa.me/201055670098?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    window.open(`https://wa.me/201055670098?text=${encodeURIComponent(customerMessage())}`, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -127,7 +139,7 @@ export default function Home() {
             <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }); }}>
               Download Now <span>←</span>
             </button>
-          ) : <form className="checkoutForm" onSubmit={confirmPayment}>
+          ) : <form className="checkoutForm" onSubmit={startPayment}>
             <div className="checkoutStep"><b>1</b><span>اكتب بياناتك</span></div>
             <label>الاسم بالكامل<input required value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="اسمك" autoComplete="name" /></label>
             <label>رقم الموبايل<input required value={customerPhone} onChange={(event) => setCustomerPhone(event.target.value)} placeholder="01xxxxxxxxx" inputMode="tel" dir="ltr" autoComplete="tel" /></label>
@@ -135,21 +147,19 @@ export default function Home() {
 
             <div className="checkoutStep"><b>2</b><span>اختار وسيلة الدفع</span></div>
             <div className="paymentChoices">
-              <label className={paymentMethod === "instapay" ? "selected" : ""}><input type="radio" name="payment" value="instapay" checked={paymentMethod === "instapay"} onChange={() => setPaymentMethod("instapay")} /><span><strong>InstaPay</strong><small>تحويل مباشر</small></span></label>
-              <label className={paymentMethod === "vodafone" ? "selected" : ""}><input type="radio" name="payment" value="vodafone" checked={paymentMethod === "vodafone"} onChange={() => setPaymentMethod("vodafone")} /><span><strong>Vodafone Cash</strong><small>تحويل للمحفظة</small></span></label>
+              <label className={paymentMethod === "instapay" ? "selected" : ""}><input type="radio" name="payment" value="instapay" checked={paymentMethod === "instapay"} onChange={() => { setPaymentMethod("instapay"); setPaymentStarted(false); }} /><span><strong>InstaPay</strong><small>تحويل مباشر</small></span></label>
+              <label className={paymentMethod === "vodafone" ? "selected" : ""}><input type="radio" name="payment" value="vodafone" checked={paymentMethod === "vodafone"} onChange={() => { setPaymentMethod("vodafone"); setPaymentStarted(false); }} /><span><strong>Vodafone Cash</strong><small>تحويل للمحفظة</small></span></label>
             </div>
 
-            {paymentMethod && <div className={`selectedPayment ${paymentMethod}`}>
-              <div><b>3</b><span>حوّل 100 جنيه</span></div>
-              {paymentMethod === "instapay" ? (
-                <a href="https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6" target="_blank" rel="noreferrer" onClick={() => (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: "InstaPay" })}>افتح InstaPay للتحويل <span>←</span></a>
-              ) : (
-                <button type="button" onClick={() => { navigator.clipboard.writeText("01055670098"); (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: "Vodafone Cash" }); }}><span dir="ltr">01055670098</span><small>نسخ الرقم</small></button>
-              )}
+            {!paymentStarted ? <>
+              <small className="paymentNote">اضغط «تم» للانتقال إلى وسيلة الدفع التي اخترتها.</small>
+              <button className="confirmOrder" type="submit" disabled={!customerName.trim() || !customerPhone.trim() || !paymentMethod}>تم <span>←</span></button>
+            </> : <div className={`paymentFollowUp ${paymentMethod}`}>
+              <strong>أكمل تحويل 100 جنيه</strong>
+              {paymentMethod === "vodafone" && <button type="button" className="cashNumber" onClick={() => navigator.clipboard.writeText("01055670098")}><span dir="ltr">01055670098</span><small>اضغط لنسخ الرقم</small></button>}
+              <small>بعد الدفع احتفظ بصورة الإيصال.</small>
+              <button className="confirmOrder" type="button" onClick={confirmReceipt}>تأكيد الدفع <span>←</span></button>
             </div>}
-
-            <small className="paymentNote">بعد التحويل احتفظ بصورة الإيصال، واضغط «تم» لتأكيد طلبك.</small>
-            <button className="confirmOrder" type="submit" disabled={!customerName.trim() || !customerPhone.trim() || !paymentMethod}>تم <span>←</span></button>
           </form>}
         </div>
       </section>
