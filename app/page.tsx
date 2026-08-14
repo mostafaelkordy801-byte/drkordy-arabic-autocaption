@@ -143,8 +143,8 @@ export default function Home() {
               )}
             </div>}
 
-            <small className="paymentNote">بعد التحويل احتفظ بصورة الإيصال، واضغط «تم» لإرسالها على واتساب.</small>
-            <button className="confirmOrder" type="submit" disabled={!customerName.trim() || !customerPhone.trim() || !paymentMethod}>تم — ابعت إيصال الدفع على واتساب <span>←</span></button>
+            <small className="paymentNote">بعد التحويل احتفظ بصورة الإيصال، واضغط «تم» لتأكيد طلبك.</small>
+            <button className="confirmOrder" type="submit" disabled={!customerName.trim() || !customerPhone.trim() || !paymentMethod}>تم <span>←</span></button>
           </form>
         </div>
       </section>
