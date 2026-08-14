@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 
-const ordersEndpoint = "https://script.google.com/macros/s/AKfycbza07vRykNYfle7a0g15tcqKs5Ec29esf8zMqrdG9GwYB-NF9N1vmRuvaqCnJAjouFj/exec";
+const ordersEndpoint = "https://script.google.com/macros/s/AKfycbyMoY_mdozppCuPZC8BvVUmzRlaw3j5jKSqefC6kYws8-mcdeXr40CAnG6H9LQmjkVlZg/exec";
 
 const features = [
   { n: "01", title: "شراء مرة واحدة", text: "من غير اشتراك شهري، ولا مصاريف بتتكرر كل ما تفتح البرنامج." },
@@ -30,9 +30,14 @@ export default function Home() {
   const [paymentStarted, setPaymentStarted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [isUploadingReceipt, setIsUploadingReceipt] = useState(false);
+  const [receiptError, setReceiptError] = useState("");
 
-  const customerMessage = () => {
+  const customerMessage = (receiptOrderId: string) => {
     const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
+    const receiptUrl = `${ordersEndpoint}?receipt=${encodeURIComponent(receiptOrderId)}`;
     return [
       "أهلاً، أنا دفعت 100 جنيه لشراء Dr Kordy Studio — Arabic AutoCaption.",
       "",
@@ -40,8 +45,8 @@ export default function Home() {
       `رقم الموبايل: ${customerPhone.trim()}`,
       customerEmail.trim() ? `الإيميل: ${customerEmail.trim()}` : "",
       `وسيلة الدفع: ${methodName}`,
-      "",
-      "هبعت صورة إيصال الدفع في الرسالة التالية.",
+      `رقم الطلب: ${receiptOrderId}`,
+      `رابط إيصال الدفع: ${receiptUrl}`,
     ].filter(Boolean).join("\n");
   };
 
@@ -50,6 +55,12 @@ export default function Home() {
     if (!customerName.trim() || !customerPhone.trim() || !paymentMethod) return;
 
     const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
+    const nextOrderId = `DK-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const paymentUrl = paymentMethod === "instapay"
+      ? "https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6"
+      : isMobile ? "https://vf.eg/vfcash" : "";
+    const paymentWindow = paymentUrl ? window.open("about:blank", "_blank") : null;
     setIsSubmitting(true);
     setSubmitError("");
 
@@ -59,6 +70,8 @@ export default function Home() {
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
+          action: "start",
+          orderId: nextOrderId,
           name: customerName.trim(),
           phone: customerPhone.trim(),
           email: customerEmail.trim(),
@@ -66,22 +79,66 @@ export default function Home() {
         }),
       });
     } catch {
+      paymentWindow?.close();
       setSubmitError("تعذر حفظ بياناتك. تأكد من الإنترنت وحاول مرة أخرى.");
       setIsSubmitting(false);
       return;
     }
 
-    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "addpaymentinfo_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
+    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName });
+    setOrderId(nextOrderId);
+    setReceiptFile(null);
+    setReceiptError("");
     setPaymentStarted(true);
     setIsSubmitting(false);
-    if (paymentMethod === "instapay") window.location.assign("https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6");
-    else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) window.location.assign("https://vf.eg/vfcash");
+    if (paymentWindow && paymentUrl) paymentWindow.location.href = paymentUrl;
   };
 
-  const confirmReceipt = () => {
+  const confirmReceipt = async () => {
+    if (!receiptFile || !orderId) {
+      setReceiptError("ارفق صورة إيصال الدفع أولاً.");
+      return;
+    }
+    if (!receiptFile.type.startsWith("image/")) {
+      setReceiptError("اختر صورة إيصال بصيغة صحيحة.");
+      return;
+    }
+    if (receiptFile.size > 5 * 1024 * 1024) {
+      setReceiptError("حجم الصورة كبير. الحد الأقصى 5 ميجابايت.");
+      return;
+    }
+
     const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
-    (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "contact_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
-    window.open(`https://wa.me/201055670098?text=${encodeURIComponent(customerMessage())}`, "_blank", "noopener,noreferrer");
+    setIsUploadingReceipt(true);
+    setReceiptError("");
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(new Error("read"));
+        reader.readAsDataURL(receiptFile);
+      });
+      await fetch(ordersEndpoint, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "receipt",
+          orderId,
+          fileName: receiptFile.name,
+          mimeType: receiptFile.type,
+          base64: dataUrl.split(",")[1],
+        }),
+      });
+    } catch {
+      setReceiptError("تعذر رفع الإيصال. تأكد من الإنترنت وحاول مرة أخرى.");
+      setIsUploadingReceipt(false);
+      return;
+    }
+
+    (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName });
+    setIsUploadingReceipt(false);
+    window.location.href = `https://wa.me/201055670098?text=${encodeURIComponent(customerMessage(orderId))}`;
   };
 
   return (
@@ -162,7 +219,7 @@ export default function Home() {
           <div className="price"><strong>100</strong><span>جنيه<br />مرة واحدة</span></div>
           <ul><li>Arabic AutoCaption</li><li>يعمل بدون إنترنت</li><li>لا توجد رسوم شهرية</li><li>خطوات تثبيت واضحة</li></ul>
           {!showCheckout ? (
-            <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }, { eventID: "initiatecheckout_" + Date.now() + "_" + Math.random().toString(36).slice(2) }); }}>
+            <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }); }}>
               Download Now <span>←</span>
             </button>
           ) : <form className="checkoutForm" onSubmit={startPayment}>
@@ -173,8 +230,8 @@ export default function Home() {
 
             <div className="checkoutStep"><b>2</b><span>اختار وسيلة الدفع</span></div>
             <div className="paymentChoices">
-              <label className={paymentMethod === "instapay" ? "selected" : ""}><input type="radio" name="payment" value="instapay" checked={paymentMethod === "instapay"} onChange={() => { setPaymentMethod("instapay"); setPaymentStarted(false); }} /><span><strong>InstaPay</strong><small>تحويل مباشر</small></span></label>
-              <label className={paymentMethod === "vodafone" ? "selected" : ""}><input type="radio" name="payment" value="vodafone" checked={paymentMethod === "vodafone"} onChange={() => { setPaymentMethod("vodafone"); setPaymentStarted(false); }} /><span><strong>Vodafone Cash</strong><small>تحويل للمحفظة</small></span></label>
+              <label className={paymentMethod === "instapay" ? "selected" : ""}><input type="radio" name="payment" value="instapay" checked={paymentMethod === "instapay"} onChange={() => { setPaymentMethod("instapay"); setPaymentStarted(false); setReceiptFile(null); }} /><span><strong>InstaPay</strong><small>تحويل مباشر</small></span></label>
+              <label className={paymentMethod === "vodafone" ? "selected" : ""}><input type="radio" name="payment" value="vodafone" checked={paymentMethod === "vodafone"} onChange={() => { setPaymentMethod("vodafone"); setPaymentStarted(false); setReceiptFile(null); }} /><span><strong>Vodafone Cash</strong><small>تحويل للمحفظة</small></span></label>
             </div>
 
             {!paymentStarted ? <>
@@ -184,8 +241,14 @@ export default function Home() {
             </> : <div className={`paymentFollowUp ${paymentMethod}`}>
               <strong>أكمل تحويل 100 جنيه</strong>
               {paymentMethod === "vodafone" && <button type="button" className="cashNumber" onClick={() => navigator.clipboard.writeText("01055670098")}><span dir="ltr">01055670098</span><small>اضغط لنسخ الرقم</small></button>}
-              <small>بعد الدفع احتفظ بصورة الإيصال.</small>
-              <button className="confirmOrder" type="button" onClick={confirmReceipt}>تأكيد الدفع <span>←</span></button>
+              <small>بعد التحويل ارفق صورة الإيصال. لن يتم تأكيد الطلب بدونها.</small>
+              <label className="receiptUpload">
+                <input type="file" accept="image/*" onChange={(event) => { setReceiptFile(event.target.files?.[0] ?? null); setReceiptError(""); }} />
+                <span>{receiptFile ? receiptFile.name : "ارفق صورة إيصال الدفع"}</span>
+                <b>{receiptFile ? "✓" : "+"}</b>
+              </label>
+              {receiptError && <small className="receiptError" role="alert">{receiptError}</small>}
+              <button className="confirmOrder" type="button" disabled={!receiptFile || isUploadingReceipt} onClick={confirmReceipt}>{isUploadingReceipt ? "جاري رفع الإيصال..." : "تم"} <span>←</span></button>
             </div>}
           </form>}
         </div>
@@ -200,4 +263,3 @@ export default function Home() {
     </main>
   );
 }
-
