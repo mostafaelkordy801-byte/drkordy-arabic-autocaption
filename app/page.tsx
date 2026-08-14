@@ -11,7 +11,7 @@ const features = [
 ];
 
 const faqs = [
-      (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "contact_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
+  ["هل فيه اشتراك شهري؟", "لا. بتدفع 100 جنيه مرة واحدة والنسخة تفضل معاك مدى الحياة."],
   ["لازم أكون متصل بالإنترنت؟", "لا. Dr Kordy Studio — Arabic AutoCaption بيشتغل أوفلاين بعد التثبيت."],
   ["هل ملفاتي بتترفع على سيرفر؟", "لأن المعالجة أوفلاين، ملفاتك تفضل على جهازك أثناء الشغل."],
   ["هستلم الـplugin إزاي؟", "بعد تأكيد الطلب والدفع، هتوصلك النسخة مع خطوات التثبيت والتشغيل."],
@@ -71,7 +71,7 @@ export default function Home() {
       return;
     }
 
-    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName });
+    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "addpaymentinfo_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
     setPaymentStarted(true);
     setIsSubmitting(false);
     if (paymentMethod === "instapay") window.location.assign("https://ipn.eg/S/mostafaelkordy.123/instapay/28f4X6");
@@ -80,7 +80,7 @@ export default function Home() {
 
   const confirmReceipt = () => {
     const methodName = paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash";
-    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "addpaymentinfo_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
+    (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "contact_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
     window.open(`https://wa.me/201055670098?text=${encodeURIComponent(customerMessage())}`, "_blank", "noopener,noreferrer");
   };
 
@@ -162,7 +162,7 @@ export default function Home() {
           <div className="price"><strong>100</strong><span>جنيه<br />مرة واحدة</span></div>
           <ul><li>Arabic AutoCaption</li><li>يعمل بدون إنترنت</li><li>لا توجد رسوم شهرية</li><li>خطوات تثبيت واضحة</li></ul>
           {!showCheckout ? (
-            <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }); }}>
+            <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }, { eventID: "initiatecheckout_" + Date.now() + "_" + Math.random().toString(36).slice(2) }); }}>
               Download Now <span>←</span>
             </button>
           ) : <form className="checkoutForm" onSubmit={startPayment}>
@@ -200,3 +200,4 @@ export default function Home() {
     </main>
   );
 }
+
