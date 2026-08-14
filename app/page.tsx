@@ -11,7 +11,7 @@ const features = [
 ];
 
 const faqs = [
-  ["هل فيه اشتراك شهري؟", "لا. بتدفع 100 جنيه مرة واحدة والنسخة تفضل معاك مدى الحياة."],
+      (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName }, { eventID: "contact_" + Date.now() + "_" + Math.random().toString(36).slice(2) });
   ["لازم أكون متصل بالإنترنت؟", "لا. Dr Kordy Studio — Arabic AutoCaption بيشتغل أوفلاين بعد التثبيت."],
   ["هل ملفاتي بتترفع على سيرفر؟", "لأن المعالجة أوفلاين، ملفاتك تفضل على جهازك أثناء الشغل."],
   ["هستلم الـplugin إزاي؟", "بعد تأكيد الطلب والدفع، هتوصلك النسخة مع خطوات التثبيت والتشغيل."],
