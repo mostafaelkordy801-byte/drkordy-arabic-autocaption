@@ -4,6 +4,11 @@ import { FormEvent, useState } from "react";
 
 const ordersEndpoint = "https://script.google.com/macros/s/AKfycbyMoY_mdozppCuPZC8BvVUmzRlaw3j5jKSqefC6kYws8-mcdeXr40CAnG6H9LQmjkVlZg/exec";
 
+const trackMetaEvent = (eventName: string, parameters: Record<string, unknown>) => {
+  const eventId = `${eventName}-${globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`}`;
+  (window as any).fbq?.("track", eventName, parameters, { eventID: eventId });
+};
+
 const features = [
   { n: "01", title: "شراء مرة واحدة", text: "من غير اشتراك شهري، ولا مصاريف بتتكرر كل ما تفتح البرنامج." },
   { n: "02", title: "شغال أوفلاين", text: "كمّل شغلك من غير إنترنت، ومن غير ما ملفاتك تخرج من جهازك." },
@@ -85,7 +90,7 @@ export default function Home() {
       return;
     }
 
-    (window as any).fbq?.("track", "AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName });
+    trackMetaEvent("AddPaymentInfo", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP", payment_method: methodName });
     setOrderId(nextOrderId);
     setReceiptFile(null);
     setReceiptError("");
@@ -136,7 +141,7 @@ export default function Home() {
       return;
     }
 
-    (window as any).fbq?.("track", "Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName });
+    trackMetaEvent("Contact", { content_name: "Dr Kordy Studio order confirmation", value: 100, currency: "EGP", payment_method: methodName });
     setIsUploadingReceipt(false);
     window.location.href = `https://wa.me/201055670098?text=${encodeURIComponent(customerMessage(orderId))}`;
   };
@@ -219,7 +224,7 @@ export default function Home() {
           <div className="price"><strong>100</strong><span>جنيه<br />مرة واحدة</span></div>
           <ul><li>Arabic AutoCaption</li><li>يعمل بدون إنترنت</li><li>لا توجد رسوم شهرية</li><li>خطوات تثبيت واضحة</li></ul>
           {!showCheckout ? (
-            <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); (window as any).fbq?.("track", "InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }); }}>
+            <button className="downloadNow" type="button" onClick={() => { setShowCheckout(true); trackMetaEvent("InitiateCheckout", { content_name: "Dr Kordy Studio", value: 100, currency: "EGP" }); }}>
               Download Now <span>←</span>
             </button>
           ) : <form className="checkoutForm" onSubmit={startPayment}>
